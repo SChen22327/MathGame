@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class MathGame {
 
@@ -42,12 +43,15 @@ public class MathGame {
                 currentPlayer.incrementScore();  // this increments the currentPlayer's score
                 currentPlayer.incrementStreak();
                 swapPlayers();  // this helper method (shown below) sets currentPlayer to the other Player
-                losers = new int[2];
+                Arrays.fill(losers, 0);
             } else {
                 System.out.println("INCORRECT!");
+                currentPlayer.resetStreak();
                 determineWinner();
                 if (losers[0] != 0 && losers[1] != 0) {
                     gameOver = true;
+                } else {
+                    swapPlayers();
                 }
             }
         }
@@ -71,6 +75,7 @@ public class MathGame {
         gameOver = false;
         currentPlayer = null;
         winner = null;
+        Arrays.fill(losers, 0);
     }
 
     // ------------ PRIVATE HELPER METHODS (internal use only) ------------
@@ -148,5 +153,56 @@ public class MathGame {
         } else {
             losers[1] = lost;
         }
+        if (losers[0] == 1) {
+            if (losers[1] == 2) {
+                winner = player3;
+            } else if (losers[1] == 3) {
+                winner = player2;
+            }
+        } else if (losers[0] == 2) {
+            if (losers[1] == 1) {
+                winner = player3;
+            } else if (losers[1] == 3) {
+                winner = player1;
+            }
+        } else if (losers[0] == 3) {
+            if (losers[1] == 1) {
+                winner = player2;
+            } else if (losers[1] == 2) {
+                winner = player1;
+            }
+        }
+    }
+    public String leaderboard() {
+        String order = "1. " + winner.getName();
+        if (winner == player1) {
+            if (player2.getScore() > player3.getScore()) {
+                order += "\n2. " + player2.getName() + "\n3. " + player3.getName();
+            } else if (player3.getScore() > player2.getScore()) {
+                order += "\n2. " + player3.getName() + "\n3. " + player2.getName();
+            } else {
+                order += "\n2. " + player2.getName() + "\n2. " + player3.getName();
+                order += "\n" + player2.getName() + " and " + player3.getName() + " tied for second!";
+            }
+        } else if (winner == player2) {
+            if (player1.getScore() > player3.getScore()) {
+                order += "\n2. " + player1.getName() + "\n3. " + player3.getName();
+            } else if (player3.getScore() > player1.getScore()) {
+                order += "\n2. " + player3.getName() + "\n3. " + player1.getName();
+            } else {
+                order += "\n2. " + player1.getName() + "\n2. " + player3.getName();
+                order += "\n" + player1.getName() + " and " + player3.getName() + " tied for second!";
+            }
+        } else {
+            if (player2.getScore() > player1.getScore()) {
+                order += "\n2. " + player2.getName() + "\n3. " + player1.getName();
+            } else if (player1.getScore() > player2.getScore()) {
+                order += "\n2. " + player1.getName() + "\n3. " + player2.getName();
+            } else {
+                order += "\n2. " + player2.getName() + "\n2. " + player1.getName();
+                order += "\n" + player2.getName() + " and " + player1.getName() + " tied for second!";
+            }
+        }
+        return order;
     }
 }

@@ -27,7 +27,11 @@ public class Player {
     public void incrementStreak() {
         streak++;
     }
+    public void resetStreak() {
+        streak = 0;
+    }
     public void reset() {
         score = 0;
+        streak = 0;
     }
 }
